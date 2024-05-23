@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//ENUMS
+enum tipoRol {
+  Admin
+  Usuario
+  Invitado
+}
+
+enum tipoComentario {
+  positivo
+  negativo
+}
+
+//TABLAS
+model Rol {
+  id      Int       @id @default(autoincrement())
+  tipo    tipoRol   @default(Invitado)
+  usuario Usuario[]
+
+  @@map("rol")
+}
+
+model Usuario {
+  id             Int          @id @default(autoincrement())
+  rol            Rol          @relation(fields: [idRol], references: [id])
+  idRol          Int          @map("id_rol")
+  nombre         String
+  email          String       @unique
+  contrasenha    String
+  comentarios    Comentario[]
+  fechaCreacion  DateTime     @map("fecha_creacion")
+  fechaEliminado DateTime     @map("fecha_eliminado")
+
+  @@map("usuario")
+}
+
+model Comentario {
+  id         Int            @id @default(autoincrement())
+  usuario    Usuario        @relation(fields: [idUsuario], references: [id])
+  pelicula   Pelicula       @relation(fields: [idPelicula], references: [id])
+  tipo       tipoComentario
+  texto      String
+  idUsuario  Int            @map("id_usuario")
+  idPelicula String         @map("id_pelicula")
+
+  @@map("comentario")
+}
+
+model Pelicula {
+  id           String             @id
+  titulo       String
+  genero       String
+  reparto      ActoresPeliculas[]
+  trama        String
+  director     String
+  anho         Int
+  comentarios  Comentario[]
+  valoraciones Float?
+
+  @@map("pelicula")
+}
+
+model Actor {
+  id                 String             @id
+  nombre             String
+  peliculas          ActoresPeliculas[]
+  fechaNacimiento    DateTime           @map("fecha_nacimiento")
+  fechaFallecimiento DateTime?          @map("fecha_fallecimiento")
+
+  @@map("actor")
+}
+
+model ActoresPeliculas {
+  actor      Actor    @relation(fields: [idActor], references: [id])
+  idActor    String   @map("id_actor")
+  pelicula   Pelicula @relation(fields: [idPelicula], references: [id])
+  idPelicula String   @map("id_pelicula")
+
+  @@id([idActor, idPelicula])
+  @@map("actores-peliclas")
+}
