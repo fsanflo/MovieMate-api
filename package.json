@@ -4,21 +4,28 @@
   "description": "Una web para encontrar películas cuando no sepas qué ver",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index"
+    "start": "ts-node-dev app/src/index.ts",
+    "migrations:run": "prisma migrate dev",
+    "migrations:create": "prisma migrate dev --create-only --name"
   },
   "author": "Francis Sánchez",
   "license": "ISC",
   "keywords": [],
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.12.12",
     "prisma": "^5.12.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@prisma/client": "^5.12.1",
+    "@prisma/client": "^5.14.0",
+    "@types/dotenv": "^8.2.0",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
     "express": "4.19.2",
-    "i18next": "^23.11.2"
+    "i18next": "^23.11.2",
+    "zod": "^3.23.8"
   }
 }
