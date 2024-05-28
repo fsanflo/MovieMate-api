@@ -53,7 +53,7 @@ model Comentario {
   usuario    Usuario        @relation(fields: [idUsuario], references: [id])
   pelicula   Pelicula       @relation(fields: [idPelicula], references: [id])
   tipo       tipoComentario
-  texto      String
+  texto      String         @db.VarChar(750)
   idUsuario  Int            @map("id_usuario")
   idPelicula String         @map("id_pelicula")
 
@@ -66,6 +66,7 @@ model Pelicula {
   genero       String
   reparto      ActoresPeliculas[]
   trama        String
+  duracion     Int
   director     String
   anho         Int
   comentarios  Comentario[]
@@ -91,5 +92,5 @@ model ActoresPeliculas {
   idPelicula String   @map("id_pelicula")
 
   @@id([idActor, idPelicula])
-  @@map("actores-peliclas")
+  @@map("actores_peliculas")
 }
