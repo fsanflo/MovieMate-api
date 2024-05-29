@@ -62,15 +62,16 @@ model Comentario {
 
 model Pelicula {
   id           String             @id
-  titulo       String
+  portada      String             @db.VarChar(300)
+  titulo       String             @db.VarChar(80)
   genero       String
   reparto      ActoresPeliculas[]
-  trama        String
+  trama        String @db.VarChar(1000)
   duracion     Int
   director     String
   anho         Int
-  comentarios  Comentario[]
   valoraciones Float?
+  comentarios  Comentario[]
 
   @@map("pelicula")
 }
