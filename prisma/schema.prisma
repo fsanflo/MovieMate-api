@@ -17,7 +17,7 @@ datasource db {
 enum tipoRol {
   Admin
   Usuario
-  Invitado
+
 }
 
 enum tipoComentario {
@@ -28,7 +28,7 @@ enum tipoComentario {
 //TABLAS
 model Rol {
   id      Int       @id @default(autoincrement())
-  tipo    tipoRol   @default(Invitado)
+  tipo    tipoRol   @default(Usuario)
   usuario Usuario[]
 
   @@map("rol")
@@ -41,56 +41,60 @@ model Usuario {
   nombre         String
   email          String       @unique
   contrasenha    String
-  comentarios    Comentario[]
   fechaCreacion  DateTime     @map("fecha_creacion")
   fechaEliminado DateTime     @map("fecha_eliminado")
 
   @@map("usuario")
 }
 
-model Comentario {
-  id         Int            @id @default(autoincrement())
-  usuario    Usuario        @relation(fields: [idUsuario], references: [id])
-  pelicula   Pelicula       @relation(fields: [idPelicula], references: [id])
-  tipo       tipoComentario
-  texto      String         @db.VarChar(750)
-  idUsuario  Int            @map("id_usuario")
-  idPelicula String         @map("id_pelicula")
-
-  @@map("comentario")
-}
-
 model Pelicula {
-  id           String             @id
-  portada      String             @db.VarChar(300)
+  id           Int                @id
+  portada      String?            @db.VarChar(300)
   titulo       String             @db.VarChar(80)
-  genero       String
   reparto      ActoresPeliculas[]
-  trama        String @db.VarChar(1000)
+  trama        String             @db.VarChar(1000)
   duracion     Int
   director     String
   anho         Int
   valoraciones Float?
-  comentarios  Comentario[]
+  generos      GenerosPeliculas[]
 
   @@map("pelicula")
 }
 
+model Genero {
+  id        Int                @id
+  nombre    String
+  peliculas GenerosPeliculas[]
+
+  @@map("genero")
+}
+
+model GenerosPeliculas {
+  genero     Genero   @relation(fields: [idGenero], references: [id])
+  idGenero   Int      @map("id_genero")
+  pelicula   Pelicula @relation(fields: [idPelicula], references: [id])
+  idPelicula Int      @map("id_pelicula")
+
+  @@id([idGenero, idPelicula])
+  @@map("generos_peliculas")
+}
+
 model Actor {
-  id                 String             @id
-  nombre             String
-  peliculas          ActoresPeliculas[]
-  fechaNacimiento    DateTime           @map("fecha_nacimiento")
-  fechaFallecimiento DateTime?          @map("fecha_fallecimiento")
+  id        Int                @id
+  nombre    String
+  imagen    String?            @db.VarChar(300)
+  peliculas ActoresPeliculas[]
 
   @@map("actor")
 }
 
 model ActoresPeliculas {
   actor      Actor    @relation(fields: [idActor], references: [id])
-  idActor    String   @map("id_actor")
+  idActor    Int      @map("id_actor")
   pelicula   Pelicula @relation(fields: [idPelicula], references: [id])
-  idPelicula String   @map("id_pelicula")
+  idPelicula Int      @map("id_pelicula")
+  personaje  String
 
   @@id([idActor, idPelicula])
   @@map("actores_peliculas")
