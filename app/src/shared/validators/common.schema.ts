@@ -32,3 +32,15 @@ export const generoSchema = z.object({
     pelicula1: z.preprocess(id => Number(id), z.number().positive()),
     pelicula2: z.preprocess(id => Number(id), z.number().positive()),
 });
+
+export const usuarioSchema = z.object({
+    idRol: z.preprocess(id => Number(id), z.number().positive()).optional(),
+    nombre: z.string(),
+    email: z.string().trim().email().min(4).max(150),
+    contrasenha: z.string().trim().min(6).max(20),
+});
+
+export const loginSchema = z.object({
+    email: z.string().trim().email().min(4).max(150),
+    contrasenha: z.string().trim().min(6).max(20),
+});

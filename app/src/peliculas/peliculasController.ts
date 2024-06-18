@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { HttpStatus } from "../shared/enums/httpStatus.enum";
 import axios from 'axios';
-import { Pelicula } from '../shared/models/peliculas.interface';
-import { any } from 'zod';
+
 
 const tmdbApiKey = process.env.TMDB_API_KEY;
 const tmdbBusquedaUrl = `https://api.themoviedb.org/3/search/movie`;

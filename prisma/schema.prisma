@@ -14,11 +14,6 @@ datasource db {
 }
 
 //ENUMS
-enum tipoRol {
-  Admin
-  Usuario
-
-}
 
 enum tipoComentario {
   positivo
@@ -28,21 +23,21 @@ enum tipoComentario {
 //TABLAS
 model Rol {
   id      Int       @id @default(autoincrement())
-  tipo    tipoRol   @default(Usuario)
+  tipo    String
   usuario Usuario[]
 
   @@map("rol")
 }
 
 model Usuario {
-  id             Int          @id @default(autoincrement())
-  rol            Rol          @relation(fields: [idRol], references: [id])
-  idRol          Int          @map("id_rol")
+  id             Int      @id @default(autoincrement())
+  rol            Rol      @relation(fields: [idRol], references: [id])
+  idRol          Int      @map("id_rol")
   nombre         String
-  email          String       @unique
+  email          String   @unique
   contrasenha    String
-  fechaCreacion  DateTime     @map("fecha_creacion")
-  fechaEliminado DateTime     @map("fecha_eliminado")
+  fechaCreacion  DateTime @map("fecha_creacion")
+  fechaEliminado DateTime? @map("fecha_eliminado")
 
   @@map("usuario")
 }
