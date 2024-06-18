@@ -45,7 +45,7 @@ model Usuario {
 model Pelicula {
   id           Int                @id
   portada      String?            @db.VarChar(300)
-  titulo       String             @db.VarChar(80)
+  titulo       String             @db.VarChar(150)
   reparto      ActoresPeliculas[]
   trama        String             @db.VarChar(1000)
   duracion     Int

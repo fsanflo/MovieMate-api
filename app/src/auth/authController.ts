@@ -81,8 +81,51 @@ export class AuthController {
                 idRol: true,
                 nombre: true,
                 email: true,
+                rol: {
+                    select: {
+                        tipo: true
+                    }
+                }
             }
         });
+        if (!listaUsuarios) {
+            return res.status(HttpStatus.NOT_FOUND).send({ error: 'No se encontraron usuarios' });
+        }
+
         return res.status(HttpStatus.OK).send(listaUsuarios);
+    }
+
+    static async datosUsuario(req: Request, res: Response) {
+        const usuarioId = +req.params.id
+        const usuario = await prisma.usuario.findFirst({
+            where: {
+                id: usuarioId,
+            },
+            include: {
+                rol: true
+            }
+        })
+
+        return res.status(HttpStatus.OK).send(usuario);
+    }
+
+    static async obtenerRoles(req: Request, res: Response) {
+        const roles = await prisma.rol.findMany({});
+        console.log(roles)
+        return res.status(HttpStatus.OK).send(roles);
+
+
+    }
+
+    static async actualizarUsuario(req: Request, res: Response) {
+        const id = +req.params.id;
+        const datosUsuario = req.body
+        const usuario = await prisma.usuario.update({
+            data: datosUsuario,
+            where: {
+                id,
+            }
+        })
+        return res.status(HttpStatus.OK).send(usuario);
     }
 }

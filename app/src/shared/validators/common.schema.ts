@@ -10,7 +10,7 @@ export const tituloSchema = z.object({
 export const peliculaSchema = z.object({
     id: z.preprocess(id => Number(id), z.number().positive()),
     portada: z.string().url().max(300).nullable(),
-    titulo: z.string().max(80),
+    titulo: z.string().max(150),
     genero: z.string().min(1),
     reparto: z.string(),
     trama: z.string().max(1000),
@@ -19,13 +19,6 @@ export const peliculaSchema = z.object({
     anho: z.number().positive(),
     valoraciones: z.number().positive(),
     idGeneros: z.number().positive().array().optional(),
-});
-
-export const comentarioSchema = z.object({
-    usuarioId: z.preprocess(id => Number(id), z.number().positive()),
-    peliculaId: z.string(),
-    tipo: z.ZodEnum.create(["positivo", "negativo"]),
-    texto: z.string().min(10).max(750),
 });
 
 export const generoSchema = z.object({
@@ -43,4 +36,9 @@ export const usuarioSchema = z.object({
 export const loginSchema = z.object({
     email: z.string().trim().email().min(4).max(150),
     contrasenha: z.string().trim().min(6).max(20),
+});
+export const usuarioActualizarSchema= z.object({
+    idRol: z.preprocess(id => Number(id), z.number().positive()).optional(),
+    nombre: z.string(),
+    email: z.string().trim().email().min(4).max(150),
 });
